@@ -87,10 +87,10 @@ def solver_2(solver, result, choice):
 
                 if (count == max_choices):
                     result[i][j] = choices[choice]
-                    for row in result:
-                        print(row)
-                    print("Position: " + str(i) + " - " +
-                          str(j) + " = " + str(choices[choice]) + " #" + str(choice) + " of " + str(len(choices)))
+                    # print("Choice: " + str(i) + " - " +
+                    #       str(j) + " = " + str(choices[choice]) + " #" + str(choice) + " of " + str(len(choices)))
+                    # for row in result:
+                    #     print(row)
 
                     return max_choices
 
@@ -158,9 +158,13 @@ def revisit_choice(choices, tries, minimum):
         solver_2(solver, result, tries[last])
         # print(str(len(choices)))
     else:
+        if (len(choices) == 0):
+            print("done")
+            exit()
         choices.pop()
         tries.pop()
         minimum.pop()
+        # print("Jump back to " + str(len(choices)))
         result = revisit_choice(choices, tries, minimum)
     return result
 
@@ -190,6 +194,18 @@ input = [
 # ]
 
 # input = [
+#     [0, 8, 0, 6, 0, 0, 0, 7, 0],
+#     [3, 0, 0, 1, 0, 0, 0, 0, 2],
+#     [0, 0, 4, 0, 3, 0, 6, 0, 0],
+#     [0, 0, 0, 0, 0, 6, 0, 5, 4],
+#     [0, 0, 8, 0, 2, 0, 9, 0, 0],
+#     [5, 1, 0, 7, 0, 0, 0, 0, 0],
+#     [0, 0, 2, 0, 7, 0, 4, 0, 0],
+#     [8, 0, 0, 0, 0, 3, 0, 0, 9],
+#     [0, 9, 0, 0, 0, 5, 0, 1, 0]
+# ]
+
+# input = [
 #     [0, 6, 0, 0, 0, 0, 1, 8, 5],
 #     [0, 0, 5, 3, 0, 8, 2, 6, 9],
 #     [0, 0, 0, 0, 6, 0, 0, 7, 4],
@@ -199,6 +215,18 @@ input = [
 #     [5, 0, 0, 0, 0, 3, 0, 0, 0],
 #     [0, 0, 1, 0, 0, 0, 6, 4, 0],
 #     [0, 0, 0, 9, 0, 0, 0, 0, 0]
+# ]
+
+# input = [
+#     [0, 0, 0, 0, 0, 1, 0, 0, 0],
+#     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+#     [0, 0, 0, 0, 0, 6, 0, 0, 0],
+#     [0, 0, 0, 4, 0, 0, 0, 0, 0],
+#     [0, 0, 0, 0, 8, 0, 0, 0, 0],
+#     [2, 0, 9, 0, 0, 0, 0, 0, 7],
+#     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+#     [0, 0, 0, 0, 0, 3, 0, 0, 0],
+#     [0, 0, 0, 0, 0, 0, 0, 0, 0]
 # ]
 
 result = [
@@ -229,13 +257,26 @@ choices = []
 tries = []
 minimum = []
 
+number_results = 0
+
 for row in input:
     print(row)
 
 
-while(not check_solved(result)):
+while(True):
     solver = apply_input(input)
     result = extract_field(solver)
+
+    if (check_solved(result)):
+        number_results += 1
+        print()
+        print("Result: " + str(number_results))
+        print(tries)
+        print()
+        for row in result:
+            print(row)
+        result = revisit_choice(choices, tries, minimum)
+        print()
 
     # Made wrong choice
     if(check_invalid(solver)):
@@ -250,8 +291,3 @@ while(not check_solved(result)):
             # print(str(len(choices)))
 
     input = copy.deepcopy(result)
-
-print()
-
-for row in result:
-    print(row)
