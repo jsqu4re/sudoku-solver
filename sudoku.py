@@ -148,7 +148,7 @@ def print_solver(solver):
     print()
 
 
-def revisit_choice(choices, tries, minimum):
+def revisit_choice(choices, tries, minimum, solutions, pop_ones):
     last = len(choices) - 1
     if (last >= 0 and tries[last] + 1 < minimum[last]):
         tries[last] += 1
@@ -161,25 +161,38 @@ def revisit_choice(choices, tries, minimum):
         if (len(choices) == 0):
             print("done")
             exit()
+
+        if (solutions[last] == 1):
+            print(tries)
+            print(solutions)
+            pop_ones += 1
+            print(str(pop_ones) + " choices, which need to be right")
+            for row in choices[last]:
+                print(row)
+        # else:
+        #     pop_ones = 0
+
         choices.pop()
         tries.pop()
         minimum.pop()
+        solutions.pop()
         # print("Jump back to " + str(len(choices)))
-        result = revisit_choice(choices, tries, minimum)
-    return result
+        result, pop_ones = revisit_choice(choices, tries, minimum,
+                                          solutions, pop_ones)
+    return result, pop_ones
 
 
-input = [
-    [0, 6, 0, 0, 0, 0, 1, 0, 0],
-    [0, 0, 5, 3, 0, 8, 0, 6, 0],
-    [0, 0, 0, 0, 6, 0, 0, 7, 4],
-    [0, 0, 7, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 4, 5, 0, 1, 8],
-    [0, 8, 0, 0, 0, 0, 0, 0, 3],
-    [5, 0, 0, 0, 0, 3, 0, 0, 0],
-    [0, 0, 1, 0, 0, 0, 6, 4, 0],
-    [0, 0, 0, 9, 0, 0, 0, 0, 0]
-]
+# input = [
+#     [0, 6, 0, 0, 0, 0, 1, 0, 0],
+#     [0, 0, 5, 3, 0, 8, 0, 6, 0],
+#     [0, 0, 0, 0, 6, 0, 0, 7, 4],
+#     [0, 0, 7, 0, 0, 0, 0, 0, 0],
+#     [0, 0, 0, 0, 4, 5, 0, 1, 8],
+#     [0, 8, 0, 0, 0, 0, 0, 0, 3],
+#     [5, 0, 0, 0, 0, 3, 0, 0, 0],
+#     [0, 0, 1, 0, 0, 0, 6, 4, 0],
+#     [0, 0, 0, 9, 0, 0, 0, 0, 0]
+# ]
 
 # input = [
 #     [9, 0, 4, 0, 5, 0, 0, 2, 0],
@@ -192,6 +205,18 @@ input = [
 #     [0, 0, 0, 0, 0, 6, 0, 0, 5],
 #     [0, 4, 0, 0, 0, 0, 0, 0, 9]
 # ]
+
+input = [
+    [0, 8, 1, 0, 5, 0, 0, 2, 0],
+    [0, 0, 7, 0, 0, 0, 0, 1, 0],
+    [6, 0, 3, 0, 8, 0, 0, 0, 0],
+    [0, 0, 0, 0, 9, 0, 0, 0, 0],
+    [0, 0, 0, 8, 0, 0, 0, 3, 6],
+    [5, 0, 0, 7, 0, 0, 0, 0, 2],
+    [1, 0, 0, 0, 0, 3, 0, 4, 0],
+    [0, 0, 0, 0, 0, 6, 0, 0, 5],
+    [0, 4, 0, 0, 0, 0, 0, 0, 9]
+]
 
 # input = [
 #     [0, 8, 0, 6, 0, 0, 0, 7, 0],
@@ -242,6 +267,30 @@ result = [
 ]
 
 # input = [
+#     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+#     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+#     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+#     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+#     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+#     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+#     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+#     [0, 0, 0, 0, 0, 0, 0, 0, 0],
+#     [0, 0, 0, 0, 0, 0, 0, 0, 0]
+# ]
+
+# input = [
+#     [0, 0, 0, 0, 5, 0, 0, 0, 9],
+#     [4, 0, 0, 0, 0, 6, 0, 0, 1],
+#     [0, 0, 1, 0, 0, 3, 0, 5, 0],
+#     [0, 0, 0, 0, 0, 8, 4, 0, 0],
+#     [0, 0, 7, 0, 0, 0, 0, 0, 0],
+#     [0, 2, 0, 1, 9, 0, 0, 8, 0],
+#     [0, 0, 9, 0, 0, 0, 0, 3, 0],
+#     [6, 0, 0, 0, 3, 4, 0, 0, 0],
+#     [3, 0, 0, 0, 0, 0, 7, 0, 0]
+# ]
+
+# input = [
 #     [1, 0, 0, 0, 0, 0, 0, 0, 0],
 #     [0, 2, 0, 0, 0, 0, 0, 0, 0],
 #     [0, 0, 3, 0, 0, 0, 0, 0, 0],
@@ -256,6 +305,9 @@ result = [
 choices = []
 tries = []
 minimum = []
+solutions = []
+
+pop_ones = 0
 
 number_results = 0
 
@@ -269,23 +321,31 @@ while(True):
 
     if (check_solved(result)):
         number_results += 1
-        print()
-        print("Result: " + str(number_results))
-        print(tries)
-        print()
-        for row in result:
-            print(row)
-        result = revisit_choice(choices, tries, minimum)
-        print()
+        for i in range(len(solutions)):
+            solutions[i] += 1
+        # print()
+        # print("Result: " + str(number_results))
+        # print(tries)
+        # print(minimum)
+        # print(solutions)
+        # print()
+        # for row in result:
+        #     print(row)
+        pop_ones = 0
+        result, pop_ones = revisit_choice(choices, tries, minimum,
+                                          solutions, pop_ones)
+        # print()
 
     # Made wrong choice
     if(check_invalid(solver)):
-        result = revisit_choice(choices, tries, minimum)
+        result, pop_ones = revisit_choice(choices, tries, minimum,
+                                          solutions, pop_ones)
     else:
         # Need for choice
         if (compare(input, result)):
             choices.append(copy.deepcopy(result))
             tries.append(0)
+            solutions.append(0)
             # print_solver(solver)
             minimum.append(solver_2(solver, result, 0))
             # print(str(len(choices)))
