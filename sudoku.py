@@ -154,9 +154,9 @@ def revisit_choice(choices, tries, minimum):
         tries[last] += 1
         solver = apply_input(copy.deepcopy(choices[last]))
         result = extract_field(solver)
-        print_solver(solver)
+        # print_solver(solver)
         solver_2(solver, result, tries[last])
-        print(str(len(choices)))
+        # print(str(len(choices)))
     else:
         choices.pop()
         tries.pop()
@@ -245,9 +245,9 @@ while(not check_solved(result)):
         if (compare(input, result)):
             choices.append(copy.deepcopy(result))
             tries.append(0)
-            print_solver(solver)
+            # print_solver(solver)
             minimum.append(solver_2(solver, result, 0))
-            print(str(len(choices)))
+            # print(str(len(choices)))
 
     input = copy.deepcopy(result)
 
