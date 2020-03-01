@@ -74,7 +74,7 @@ def check_invalid(solver):
 
 
 def solver_2(solver, result, choice):
-    print("solver_2: " + str(choice))
+    # print("solver_2: " + str(choice))
     for max_choices in range(2, 10):
         for i in range(9):
             for j in range(9):
@@ -87,8 +87,10 @@ def solver_2(solver, result, choice):
 
                 if (count == max_choices):
                     result[i][j] = choices[choice]
+                    for row in result:
+                        print(row)
                     print("Position: " + str(i) + " - " +
-                          str(j) + " = " + str(choices[choice]))
+                          str(j) + " = " + str(choices[choice]) + " #" + str(choice) + " of " + str(len(choices)))
 
                     return max_choices
 
@@ -112,9 +114,9 @@ def getSolver():
     solver = []
     size = 9
 
-    for i in range(size):
+    for _i in range(size):
         row = []
-        for j in range(size):
+        for _j in range(size):
             choices = []
             for k in range(9):
                 choices.append(k+1)
@@ -124,15 +126,15 @@ def getSolver():
 
 
 def getField():
-    solver = []
+    field = []
     size = 9
 
     for i in range(size):
         row = []
         for j in range(size):
             row.append(0)
-        solver.append(row)
-    return solver
+        field.append(row)
+    return field
 
 
 def print_solver(solver):
@@ -146,9 +148,50 @@ def print_solver(solver):
     print()
 
 
+def revisit_choice(choices, tries, minimum):
+    last = len(choices) - 1
+    if (last >= 0 and tries[last] + 1 < minimum[last]):
+        tries[last] += 1
+        solver = apply_input(copy.deepcopy(choices[last]))
+        result = extract_field(solver)
+        print_solver(solver)
+        solver_2(solver, result, tries[last])
+        print(str(len(choices)))
+    else:
+        choices.pop()
+        tries.pop()
+        minimum.pop()
+        result = revisit_choice(choices, tries, minimum)
+    return result
+
+
+input = [
+    [0, 6, 0, 0, 0, 0, 1, 0, 0],
+    [0, 0, 5, 3, 0, 8, 0, 6, 0],
+    [0, 0, 0, 0, 6, 0, 0, 7, 4],
+    [0, 0, 7, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 4, 5, 0, 1, 8],
+    [0, 8, 0, 0, 0, 0, 0, 0, 3],
+    [5, 0, 0, 0, 0, 3, 0, 0, 0],
+    [0, 0, 1, 0, 0, 0, 6, 4, 0],
+    [0, 0, 0, 9, 0, 0, 0, 0, 0]
+]
+
 # input = [
-#     [0, 6, 0, 0, 0, 0, 1, 0, 0],
-#     [0, 0, 5, 3, 0, 8, 0, 6, 0],
+#     [9, 0, 4, 0, 5, 0, 0, 2, 0],
+#     [0, 0, 7, 0, 0, 0, 0, 1, 0],
+#     [0, 0, 3, 2, 8, 0, 0, 0, 0],
+#     [0, 0, 0, 0, 9, 0, 0, 0, 0],
+#     [0, 0, 0, 8, 0, 0, 0, 3, 6],
+#     [5, 0, 0, 7, 0, 0, 0, 0, 2],
+#     [1, 0, 0, 0, 0, 3, 0, 4, 0],
+#     [0, 0, 0, 0, 0, 6, 0, 0, 5],
+#     [0, 4, 0, 0, 0, 0, 0, 0, 9]
+# ]
+
+# input = [
+#     [0, 6, 0, 0, 0, 0, 1, 8, 5],
+#     [0, 0, 5, 3, 0, 8, 2, 6, 9],
 #     [0, 0, 0, 0, 6, 0, 0, 7, 4],
 #     [0, 0, 7, 0, 0, 0, 0, 0, 0],
 #     [0, 0, 0, 0, 4, 5, 0, 1, 8],
@@ -170,17 +213,17 @@ result = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0]
 ]
 
-input = [
-    [1, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 2, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 3, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 4, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 5, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 6, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 7, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 8, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 9]
-]
+# input = [
+#     [1, 0, 0, 0, 0, 0, 0, 0, 0],
+#     [0, 2, 0, 0, 0, 0, 0, 0, 0],
+#     [0, 0, 3, 0, 0, 0, 0, 0, 0],
+#     [0, 0, 0, 4, 0, 0, 0, 0, 0],
+#     [0, 0, 0, 0, 5, 0, 0, 0, 0],
+#     [0, 0, 0, 0, 0, 6, 0, 0, 0],
+#     [0, 0, 0, 0, 0, 0, 7, 0, 0],
+#     [0, 0, 0, 0, 0, 0, 0, 8, 0],
+#     [0, 0, 0, 0, 0, 0, 0, 0, 9]
+# ]
 
 choices = []
 tries = []
@@ -192,32 +235,20 @@ for row in input:
 
 while(not check_solved(result)):
     solver = apply_input(input)
-    print_solver(solver)
     result = extract_field(solver)
 
     # Made wrong choice
     if(check_invalid(solver)):
-        last = len(choices)
-        if (tries[last] < minimum[last]):
-            tries[last] += 1
-            solver = apply_input(choices[last])
-            result = extract_field(solver)
-            solver_2(solver, result, tries[last])
-        else:
-            choices.pop()
-            tries.pop()
-            minimum.pop()
+        result = revisit_choice(choices, tries, minimum)
+    else:
+        # Need for choice
+        if (compare(input, result)):
+            choices.append(copy.deepcopy(result))
+            tries.append(0)
+            print_solver(solver)
+            minimum.append(solver_2(solver, result, 0))
+            print(str(len(choices)))
 
-    # Need for choice
-    if (compare(input, result)):
-        choices.append(copy.deepcopy(result))
-        tries.append(0)
-        minimum.append(solver_2(solver, result, 0))
-
-    print()
-    if (not compare(input, result)):
-        for row in result:
-            print(row)
     input = copy.deepcopy(result)
 
 print()
